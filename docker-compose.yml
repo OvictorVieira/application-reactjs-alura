@@ -3,7 +3,7 @@ services:
   frontend:
     container_name: application_front_end
     build:
-      context: ./client
+      context: client
       dockerfile: Dockerfile
     image: vikasraj/awesome_web
     ports:
@@ -13,7 +13,7 @@ services:
   backend:
     container_name: application_back_end
     build:
-      context: ./server
+      context: server
       dockerfile: Dockerfile
     image: vikasraj/awesome_server
     ports:
