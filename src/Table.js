@@ -18,7 +18,7 @@ const TableBody = properties => {
 
   const tableLines = properties.autors.map((line, index) => {
     return(
-      <tr>
+      <tr key={ index }>
         <td>{ line.name }</td>
         <td> { line.book } </td>
         <td>{ line.price }</td>
