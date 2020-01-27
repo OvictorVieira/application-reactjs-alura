@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Table from './Table';
+import Form from "./Form";
+
 import './App.css';
 
 class App extends Component {
@@ -31,7 +33,7 @@ class App extends Component {
   };
 
   deleteAuthor = position => {
-    const authors = this.state.authors
+    const authors = this.state.authors;
 
     this.setState({
       authors: authors.filter((author, current_position) => {
@@ -46,10 +48,11 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-
+      <Fragment>
         <Table autors={ this.state.authors } deleteAuthor={ this.deleteAuthor } />
-      </div>
+
+        <Form />
+      </Fragment>
     );
   };
 }
