@@ -46,12 +46,18 @@ class App extends Component {
     return position_to_delete !== current_position;
   };
 
+  submitListener = author => {
+    this.setState({
+      authors: [...this.state.authors, author]
+    });
+  };
+
   render() {
     return (
       <Fragment>
         <Table autors={ this.state.authors } deleteAuthor={ this.deleteAuthor } />
 
-        <Form />
+        <Form submitListener={ this.submitListener } />
       </Fragment>
     );
   };
