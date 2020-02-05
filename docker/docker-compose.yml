@@ -2,6 +2,7 @@ version: "3"
 services:
   frontend:
     tty: true
+    command: npm start
     container_name: application_reactjs_alura
     build: ./
     ports:
