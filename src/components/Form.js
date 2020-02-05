@@ -1,9 +1,15 @@
 import React, { Component } from "react";
+import FormValidator from "../utils/FormValidator";
 
 class Form extends Component {
 
   constructor(props) {
     super(props);
+
+    this.formValidator = new FormValidator({
+      field: 'name',
+      method: 'isEmpty',
+    });
 
     this.initialState = {
       name: '',
@@ -23,11 +29,15 @@ class Form extends Component {
   };
 
   submitForm = event => {
-    event.preventDefault();
-    
-    this.props.submitListener(this.state);
 
-    this.setState(this.initialState);
+    event.preventDefault();
+
+    if(this.formValidator.validate(this.state)) {
+
+      this.props.submitListener(this.state);
+
+      this.setState(this.initialState);
+    }
   };
 
   render() {
