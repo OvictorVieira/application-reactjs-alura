@@ -6,15 +6,35 @@ class Form extends Component {
   constructor(props) {
     super(props);
 
-    this.formValidator = new FormValidator({
-      field: 'name',
-      method: 'isEmpty',
-    });
+    const fields_to_validate = [
+      {
+        field: 'name',
+        method: 'isEmpty',
+        validWhen: false,
+        message: 'Insira o nome do Autor'
+      },
+      {
+        field: 'book',
+        method: 'isEmpty',
+        validWhen: false,
+        message: 'Insira o nome do Livro'
+      },
+      {
+        field: 'price',
+        method: 'isInt',
+        args: [{ min: 0, max: 999999 }],
+        validWhen: true,
+        message: 'Insira um valor numérico'
+      }
+    ];
+
+    this.formValidator = new FormValidator(fields_to_validate);
 
     this.initialState = {
       name: '',
       book: '',
       price: '',
+      validation: this.formValidator.valid(),
     };
 
     this.state = this.initialState;
@@ -32,11 +52,24 @@ class Form extends Component {
 
     event.preventDefault();
 
-    if(this.formValidator.validate(this.state)) {
+    const validation = this.formValidator.validate(this.state);
+
+    if(validation.isValid) {
 
       this.props.submitListener(this.state);
 
       this.setState(this.initialState);
+    }
+    else {
+      const { name, book, price} = validation;
+
+      const fields = [name, book, price];
+
+      const invalidFields = fields.filter(element => {
+        return element.isInvalid;
+      });
+
+      invalidFields.forEach(console.log);
     }
   };
 
