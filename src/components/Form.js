@@ -1,14 +1,41 @@
 import React, { Component } from "react";
+import FormValidator from "../utils/FormValidator";
+import PopUp from './PopUp';
 
 class Form extends Component {
 
   constructor(props) {
     super(props);
 
+    const fields_to_validate = [
+      {
+        field: 'name',
+        method: 'isEmpty',
+        validWhen: false,
+        message: 'Insira o nome do Autor'
+      },
+      {
+        field: 'book',
+        method: 'isEmpty',
+        validWhen: false,
+        message: 'Insira o nome do Livro'
+      },
+      {
+        field: 'price',
+        method: 'isInt',
+        args: [{ min: 0, max: 999999 }],
+        validWhen: true,
+        message: 'Insira um valor numérico'
+      }
+    ];
+
+    this.formValidator = new FormValidator(fields_to_validate);
+
     this.initialState = {
       name: '',
       book: '',
       price: '',
+      validation: this.formValidator.valid(),
     };
 
     this.state = this.initialState;
@@ -23,11 +50,30 @@ class Form extends Component {
   };
 
   submitForm = event => {
-    event.preventDefault();
-    
-    this.props.submitListener(this.state);
 
-    this.setState(this.initialState);
+    event.preventDefault();
+
+    const validation = this.formValidator.validate(this.state);
+
+    if(validation.isValid) {
+
+      this.props.submitListener(this.state);
+
+      this.setState(this.initialState);
+    }
+    else {
+      const { name, book, price} = validation;
+
+      const fields = [name, book, price];
+
+      const invalidFields = fields.filter(element => {
+        return element.isInvalid;
+      });
+
+      invalidFields.forEach(field => {
+        PopUp.showMessage('error', field.message)
+      });
+    }
   };
 
   render() {
